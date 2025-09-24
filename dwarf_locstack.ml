@@ -782,15 +782,15 @@ let _ =
 (* The same array example with an overlay.
 
   b_offset :    v
-  b_storage: |--01234567XXXXCDEF----...
+  b_storage: |..01234567XXXXCDEF...
 
   offset   :    |------>
-  width    :            |--|
+  width    :           |----|
   o_offset :            v
-  o_storage:            89AB
+  o_storage:           |89AB|
 
   c_offset :    v
-  composite: |--0123456789ABCDEF----...
+  composite: |..0123456789ABCDEF...
 
  *)
 let _ =
@@ -819,17 +819,17 @@ let reg_size = data_size (Reg 1) context
 let vreg_size = data_size (Reg 4) context
 
 (*
-  b_offset : 3     v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 3       v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : 5     |-->
-  width    : 6         |----|
+  offset   : 5       |--->
+  width    : 6           |------|
 
-  o_offset : 7         v
-  o_storage:   |ooooooooooooooooooo|
+  o_offset : 7            v
+  o_storage:      |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :       v
-  composite:    |bbbbbb|oooo|bbbbbbb|
+  c_offset :         v
+  composite:     |bbbbbbbbyyyyyybbbbbbbbbbbbbbbbbb|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 3; DW_OP_offset;
@@ -845,17 +845,17 @@ let _ =
     "overlay: base bigger than overlay"
 
 (*
-  b_offset : 3     v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 3       v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : 23    |---------->
-  width    : 6                 |----|
+  offset   : 23      |--------------------->
+  width    : 6                             |------|
 
-  o_offset : 7                 v
-  o_storage:             |ooooooooooooooooooo|
+  o_offset : 7                              v
+  o_storage:                        |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :       v
-  composite:    |bbbbbbbbbbbbbb|oooo|
+  c_offset :         v
+  composite:     |bbbbbbbbbbbbbbbbbbbbbbbbbbyyyyyy|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 3; DW_OP_offset;
@@ -870,17 +870,17 @@ let _ =
     "overlay: overlay ends at base's end"
 
 (*
-  b_offset :    v
-  b_storage:    |bbbb|
+  b_offset : 0         v
+  b_storage:          |bbbb|
 
-  offset   :    |
-  width    :    |--------|
+  offset   : 0         |
+  width    : 13       |-------------|
 
-  o_offset :    v
-  o_storage: |ooooooooooooooooo|
+  o_offset : 7         v
+  o_storage:   |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :    v
-  composite:    |oooooooo|
+  c_offset :           v
+  composite:          |yyyyyyyyyyyyy|
  *)
 let _ =
   let width = 13 in
@@ -895,17 +895,17 @@ let _ =
     "overlay: overlay bigger than base"
 
 (*
-  b_offset :    v
+  b_offset : 0   v
   b_storage:    |bbbb|
 
-  offset   :    |
-  width    :    |----|
+  offset   : 0   |
+  width    : 4  |----|
 
-  o_offset :    v
-  o_storage:    |oooo|
+  o_offset : 0   v
+  o_storage:    |yyyy|
 
-  c_offset :    v
-  composite:    |oooo|
+  c_offset :     v
+  composite:    |yyyy|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 1;
@@ -919,17 +919,17 @@ let _ =
     "overlay: base perfectly covered by overlay"
 
 (*
-  b_offset : 3     v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 3       v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : 32    |------------------->
-  width    : 6                          |----|
+  offset   : 32      |------------------------------>
+  width    : 6                                      |------|
 
-  o_offset : 7                          v
-  o_storage:                      |ooooooooooooooooooo|
+  o_offset : 7                                       v
+  o_storage:                                 |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :       v
-  composite:    |bbbbbbbbbbbbbbbbbbb|xxx|oooo|
+  c_offset :         v
+  composite:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbUUUyyyyyy|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 3; DW_OP_offset;
@@ -945,17 +945,17 @@ let _ =
     "overlay: overlay after base with gap"
 
 (*
-  b_offset : 3     v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 3       v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : 29    |--------------->
-  width    : 6                      |----|
+  offset   : 29      |--------------------------->
+  width    : 6                                   |------|
 
-  o_offset : 7                      v
-  o_storage:                  |ooooooooooooooooooo|
+  o_offset : 7                                    v
+  o_storage:                              |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :       v
-  composite:    |bbbbbbbbbbbbbbbbbbb|oooo|
+  c_offset :         v
+  composite:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbyyyyyy|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 3; DW_OP_offset;
@@ -972,17 +972,17 @@ let _ =
     "overlay: size of composite"
 
 (*
-  b_offset : 3     v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 3       v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : 26    |------------->
-  width    : 6                    |----|
+  offset   : 26      |------------------------>
+  width    : 6                                |------|
 
-  o_offset : 7                    v
-  o_storage:                |ooooooooooooooooooo|
+  o_offset : 7                                 v
+  o_storage:                           |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :       v
-  composite:    |bbbbbbbbbbbbbbbbb|oooo|
+  c_offset :         v
+  composite:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbyyyyyy|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 3; DW_OP_offset;
@@ -997,17 +997,17 @@ let _ =
     "overlay: registers with overlap"
 
 (*
-  b_offset : 3     v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 3       v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : 26    |------------->
-  width    : 0                    |
+  offset   : 26      |------------------------>
+  width    : 0                                ||
 
-  o_offset : 7                    v
-  o_storage:                |ooooooooooooooooooo|
+  o_offset : 7                                 v
+  o_storage:                           |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :       v
-  composite:    |bbbbbbbbbbbbbbbbbbb|
+  c_offset :         v
+  composite:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 3; DW_OP_offset;
@@ -1021,14 +1021,14 @@ let _ =
     "overlay: width is nil"
 
 (*
-  b_offset :    v
+  b_offset : 0   v
   b_storage:    |bbbb|
 
-  offset   :    |
-  width    :    |-------|
+  offset   : 0   |
+  width    : 5  |-----|
 
-  o_offset :    v
-  o_storage:    |oooo|
+  o_offset : 0   v
+  o_storage:    |yyyy|
 
   composite:    N/A
  *)
@@ -1041,11 +1041,21 @@ let _ =
   test_error (fun () -> eval_to_loc overlay_locexpr context)
     "overlay: width is larger than overlay"
 
+(*
+  b_offset : 0   v
+  b_storage:    |bbbb|
+
+  offset   : 0   |
+  width    : 5  |-----|
+
+  o_offset : 2   v
+  o_storage:  |yyyy|
+
+  composite:    N/A
+ *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 1;
-                         DW_OP_reg 2;
-                         DW_OP_const 2;
-                         DW_OP_offset;
+                         DW_OP_reg 2; DW_OP_const 2; DW_OP_offset;
                          DW_OP_const 0;
                          DW_OP_const (reg_size - 1);
                          DW_OP_overlay] in
@@ -1053,16 +1063,17 @@ let _ =
     "overlay: width is larger than overlay, non-zero overlay offset"
 
 (*
-  b_offset :    v
-  b_storage:    |
+  b_offset : 0   v
+  b_storage:    ||
 
-  offset   :    |
-  width    :    |----|
+  offset   : 0   |
+  width    : 4  |----|
 
-  o_offset :    v
-  o_storage:    |oooo|
+  o_offset : 0   v
+  o_storage:    |yyyy|
 
-  composite:    |oooo|
+  c_offset :     v
+  composite:    |yyyy|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_composite;
@@ -1076,16 +1087,17 @@ let _ =
     "overlay: on empty base"
 
 (*
-  b_offset :    v
-  b_storage:    |
+  b_offset : 0   v
+  b_storage:    ||
 
-  offset   :    |->
-  width    :       |----|
+  offset   : 3   |->
+  width    : 4     |----|
 
-  o_offset :       v
-  o_storage:       |oooo|
+  o_offset :        v
+  o_storage:       |yyyy|
 
-  composite:    |xx|oooo|
+  c_offset :     v
+  composite:    |UUUyyyy|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_composite;
@@ -1100,17 +1112,17 @@ let _ =
     "overlay: after empty base"
 
 (*
-  b_offset : 23               v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 23                          v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : -10    <---------|
-  width    : 6     |----|
+  offset   : -10               <---------|
+  width    : 6                |------|
 
-  o_offset : 7     v
-  o_storage:   |ooooooooooooooooooo|
+  o_offset : 7                 v
+  o_storage:           |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :                  v
-  composite:    |bb|oooo|bbbbbbbbbbb|
+  c_offset :                             v
+  composite:     |bbbbbbbbbbbbbyyyyyybbbbbbbbbbbbb|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 23; DW_OP_offset;
@@ -1126,17 +1138,17 @@ let _ =
     "overlay: negative offset, naive case"
 
 (*
-  b_offset : 23               v
-  b_storage:    |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 23                          v
+  b_storage:     |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : -23 <------------|
-  width    : 6  |----|
+  offset   : -23  <----------------------|
+  width    : 6   |------|
 
-  o_offset : 3  v
-  o_storage:  |ooooooooooooooooooo|
+  o_offset : 3    v
+  o_storage:  |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :                  v
-  composite:    |oooo|bbbbbbbbbbbbbb|
+  c_offset :                             v
+  composite:     |yyyyyybbbbbbbbbbbbbbbbbbbbbbbbbb|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 23; DW_OP_offset;
@@ -1151,17 +1163,17 @@ let _ =
     "overlay: negative offset, overlay starts at base beginning"
 
 (*
-  b_offset : 15               v
-  b_storage:        |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 15                       v
+  b_storage:          |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : -20  <-----------|
-  width    : 6   |----|
+  offset   : -20  <-------------------|
+  width    : 6   |------|
 
-  o_offset : 3   v
-  o_storage:   |ooooooooooooooooooo|
+  o_offset : 3    v
+  o_storage:  |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :                  v
-  composite:     |oooo|bbbbbbbbbbbbbbbbb|
+  c_offset :                          v
+  composite:     |yyyyyybbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 15; DW_OP_offset;
@@ -1176,17 +1188,17 @@ let _ =
   "overlay: negative offset, overlay starts before base"
 
 (*
-  b_offset : 14               v
-  b_storage:          |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 14                       v
+  b_storage:           |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : -20  <-----------|
-  width    : 6   |----|
+  offset   : -20  <-------------------|
+  width    : 6   |------|
 
-  o_offset : 3   v
-  o_storage:   |ooooooooooooooooooo|
+  o_offset : 3    v
+  o_storage:  |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :                  v
-  composite:     |oooo|bbbbbbbbbbbbbbbbbbb|
+  c_offset :                          v
+  composite:     |yyyyyybbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 14; DW_OP_offset;
@@ -1201,17 +1213,17 @@ let _ =
   "overlay: negative offset, overlay ends at where base begins"
 
 (*
-  b_offset : 7                v
-  b_storage:               |bbbbbbbbbbbbbbbbbbb|
+  b_offset : 7                        v
+  b_storage:                  |bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
 
-  offset   : -20  <-----------|
-  width    : 6   |----|
+  offset   : -20  <-------------------|
+  width    : 6   |------|
 
-  o_offset : 3   v
-  o_storage:   |ooooooooooooooooooo|
+  o_offset : 3    v
+  o_storage:  |yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy|
 
-  c_offset :                  v
-  composite:     |oooo|xxxx|bbbbbbbbbbbbbbbbbbb|
+  c_offset :                          v
+  composite:     |yyyyyyUUUUUUUbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb|
  *)
 let _ =
   let overlay_locexpr = [DW_OP_reg 4; DW_OP_const 7; DW_OP_offset;
