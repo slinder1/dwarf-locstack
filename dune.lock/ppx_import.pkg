@@ -1,0 +1,13 @@
+(version 1.12.0)
+
+(build
+ (run dune build -p %{pkg-self:name} -j %{jobs}))
+
+(depends ocaml dune ppxlib)
+
+(source
+ (fetch
+  (url
+   https://github.com/ocaml-ppx/ppx_import/releases/download/v1.12.0/ppx_import-1.12.0.tbz)
+  (checksum
+   sha256=d6fa581c5974ac4746de113ee810a95a67cbbdd2efa04c7e271ab40c5ad17497)))

@@ -4,6 +4,8 @@
    For simplicity, all sizes are in bytes; data access is at the
    granularity of bytes.  *)
 
+(* foo bar *)
+
 (* Data are a sequence of bytes.  *)
 type data = string
 
